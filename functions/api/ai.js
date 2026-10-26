@@ -2,7 +2,7 @@
 const json = (code, obj) => new Response(JSON.stringify(obj), { status: code, headers: { 'content-type': 'application/json' } });
 
 async function ask(model, key, parts, noThinking) {
-  const generationConfig = { responseMimeType: 'application/json', maxOutputTokens: 4000 };
+  const generationConfig = { responseMimeType: 'application/json', maxOutputTokens: 7000 };
   if (noThinking) generationConfig.thinkingConfig = { thinkingBudget: 0 };
   const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
     method: 'POST',
