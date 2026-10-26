@@ -26,8 +26,9 @@ h1 em{color:var(--accent);font-style:italic}
 [lang=ar] h1,[lang=ar] .logo,[lang=ar] .card h2,[lang=ar] .tag{letter-spacing:0}
 [lang=ar] h1 em{font-style:normal}
 .lead{color:var(--mute);max-width:540px;margin:0 0 26px}
-.tabs{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--ink);border-radius:999px;padding:4px;max-width:440px;margin-bottom:18px}
-.tabs button{border:0;background:none;color:var(--ink);font:500 15px var(--sans);padding:10px 12px;border-radius:999px;cursor:pointer}
+[hidden]{display:none!important}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);border:1.5px solid var(--ink);border-radius:999px;padding:4px;max-width:560px;margin-bottom:18px}
+.tabs button{border:0;background:none;color:var(--ink);font:500 14px var(--sans);padding:10px 6px;border-radius:999px;cursor:pointer}
 .tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
 .drop{display:block;border:1.5px dashed var(--mute);border-radius:20px;background:var(--card);padding:32px 20px;text-align:center;cursor:pointer;transition:.2s}
 .drop:hover{border-color:var(--accent)}
@@ -63,6 +64,18 @@ ul.ing{list-style:none;margin:0 0 6px;padding:0;columns:2;gap:24px}
 ul.ing li{padding:5px 0;border-bottom:1px solid var(--line);break-inside:avoid}
 details summary{cursor:pointer;font-weight:600;color:var(--green);margin-top:12px}
 .tip{margin-top:14px;padding:12px 14px;background:var(--chip);border-radius:12px;font-size:14px}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.opts button{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font:500 14px var(--sans);cursor:pointer}
+.opts button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--bg)}
+.dish{display:flex;gap:14px;align-items:center;cursor:pointer;padding:16px}
+.dish:hover{border-color:var(--accent)}
+.dish>div:last-child{flex:1}
+.dish h2{font-size:20px;margin:0 0 2px}
+.thumb{width:84px;height:84px;border-radius:14px;overflow:hidden;flex:none}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.back{border:0;background:none;color:var(--green);font:600 15px var(--sans);cursor:pointer;padding:0;margin-bottom:14px}
+.back::before{content:"←";margin-inline-end:6px}
+[dir=rtl] .back::before{content:"→"}
 .foot{font-size:13px;color:var(--mute);margin-top:40px}
 .foot a{color:var(--green)}
 @media(max-width:560px){ul.ing{columns:1}}
@@ -80,20 +93,27 @@ details summary{cursor:pointer;font-weight:600;color:var(--green);margin-top:12p
 <div class="tabs" role="tablist">
 <button role="tab" id="t-fridge" aria-selected="true" data-i18n="tabF"></button>
 <button role="tab" id="t-dish" aria-selected="false" data-i18n="tabD"></button>
+<button role="tab" id="t-pop" aria-selected="false" data-i18n="tabP"></button>
 </div>
-<label class="drop"><b id="dtitle"></b><span id="dsub"></span><input type="file" id="file" accept="image/*" multiple></label>
+<div id="pop" hidden>
+<div class="opts"><button data-r="world" data-i18n="rW" aria-pressed="true"></button><button data-r="egypt" data-i18n="rE" aria-pressed="false"></button><button data-r="arab" data-i18n="rM" aria-pressed="false"></button><button data-r="italy" data-i18n="rI" aria-pressed="false"></button><button data-r="asia" data-i18n="rA" aria-pressed="false"></button><button data-r="americas" data-i18n="rU" aria-pressed="false"></button></div>
+<div class="opts"><button data-k="classic" data-i18n="kC" aria-pressed="true"></button><button data-k="trend" data-i18n="kT" aria-pressed="false"></button></div>
+<button class="go" id="showl" data-i18n="showL" style="margin-top:6px"></button>
+<p class="foot" style="margin-top:12px" data-i18n="popNote"></p>
+</div>
+<label class="drop" id="drop"><b id="dtitle"></b><span id="dsub"></span><input type="file" id="file" accept="image/*" multiple></label>
 <div class="thumbs" id="thumbs"></div>
 <button class="go" id="go" disabled></button>
 <div class="status" id="status" hidden></div>
 <div id="out"></div>
-<p class="foot"><span data-i18n="trouble"></span> <a href="/api/ai" data-i18n="test"></a> · v6</p>
+<p class="foot"><span data-i18n="trouble"></span> <a href="/api/ai" data-i18n="test"></a> · v7</p>
 </div>
 <script>
 window.addEventListener('error',e=>{try{status('Page error: '+e.message,true)}catch(_){}});
 const $=s=>document.querySelector(s);
 const T={
-en:{title:'Tab5a: photo to recipe',brand:'Tab5a',tag:'photo to plate',h1a:'Show me the food.',h1b:'I’ll show you how.',lead:'Snap your fridge and get dinner ideas with steps. Or snap a dish you love and get the full recipe.',tabF:'Fridge → Meals',tabD:'Dish → Recipe',dtF:'Add photos of your fridge or pantry',dsF:'Tap to take a photo or choose up to 4 images',dtD:'Add a photo of a dish or dessert',dsD:'Tap to take a photo or choose an image',goF:'Cook something up',goD:'Get the recipe',look:'Looking closely…',see:'I can see',make:'You could make',ing:'Ingredients',method:'Method',tip:'Chef’s tip: ',need:'need:',steps:'Show step-by-step',serves:'Serves',trouble:'Trouble?',test:'Test the server',noread:'I couldn’t read that photo. Try another one.',slow:'That took too long. Try one smaller photo.',nofood:'I couldn’t find food in that photo. Try another.',problem:'Problem: '},
-ar:{title:'طبخة | من الصورة للوصفة',brand:'طبخة',tag:'من الصورة للطبق',h1a:'وريني الأكل..',h1b:'وأنا أقولك تعمله إزاي.',lead:'صوّر التلاجة وهتلاقي أكلات تطبخها بخطوات سهلة. أو صوّر أكلة عجباك وخد وصفتها كاملة.',tabF:'من التلاجة لوجبة',tabD:'من الأكلة لوصفة',dtF:'ضيف صور للتلاجة أو المخزن',dsF:'دوس عشان تصوّر أو تختار لحد ٤ صور',dtD:'ضيف صورة أكلة أو حلو',dsD:'دوس عشان تصوّر أو تختار صورة',goF:'يلا نطبخ',goD:'هات الوصفة',look:'ثواني.. ببص على الصورة',see:'شايف عندك',make:'تقدر تعمل',ing:'المكوّنات',method:'الطريقة',tip:'نصيحة الشيف: ',need:'ناقصك:',steps:'شوف الخطوات',serves:'يكفي',trouble:'فيه مشكلة؟',test:'جرّب السيرفر',noread:'معرفتش أقرا الصورة دي. جرّب غيرها.',slow:'الموضوع اتأخر أوي. جرّب صورة أصغر.',nofood:'مش شايف أكل في الصورة دي. جرّب غيرها.',problem:'في مشكلة: '}};
+en:{title:'Tab5a: photo to recipe',brand:'Tab5a',tag:'photo to plate',h1a:'Show me the food.',h1b:'I’ll show you how.',lead:'Snap your fridge and get dinner ideas with steps. Or snap a dish you love and get the full recipe.',tabF:'Fridge → Meals',tabD:'Dish → Recipe',dtF:'Add photos of your fridge or pantry',dsF:'Tap to take a photo or choose up to 4 images',dtD:'Add a photo of a dish or dessert',dsD:'Tap to take a photo or choose an image',goF:'Cook something up',goD:'Get the recipe',look:'Looking closely…',see:'I can see',make:'You could make',ing:'Ingredients',method:'Method',tip:'Chef’s tip: ',need:'need:',steps:'Show step-by-step',serves:'Serves',trouble:'Trouble?',test:'Test the server',noread:'I couldn’t read that photo. Try another one.',slow:'That took too long. Try one smaller photo.',nofood:'I couldn’t find food in that photo. Try another.',problem:'Problem: ',tabP:'Popular',popNote:'AI picks from its general knowledge, not live rankings.',rW:'World',rE:'Egypt',rM:'Middle East',rI:'Italy',rA:'Asia',rU:'Americas',kC:'Classics',kT:'Trending',showL:'Show dishes',back:'Back',pick:'Picking dishes…',writing:'Writing the recipe…'},
+ar:{title:'طبخة | من الصورة للوصفة',brand:'طبخة',tag:'من الصورة للطبق',h1a:'وريني الأكل..',h1b:'وأنا أقولك تعمله إزاي.',lead:'صوّر التلاجة وهتلاقي أكلات تطبخها بخطوات سهلة. أو صوّر أكلة عجباك وخد وصفتها كاملة.',tabF:'من التلاجة لوجبة',tabD:'من الأكلة لوصفة',dtF:'ضيف صور للتلاجة أو المخزن',dsF:'دوس عشان تصوّر أو تختار لحد ٤ صور',dtD:'ضيف صورة أكلة أو حلو',dsD:'دوس عشان تصوّر أو تختار صورة',goF:'يلا نطبخ',goD:'هات الوصفة',look:'ثواني.. ببص على الصورة',see:'شايف عندك',make:'تقدر تعمل',ing:'المكوّنات',method:'الطريقة',tip:'نصيحة الشيف: ',need:'ناقصك:',steps:'شوف الخطوات',serves:'يكفي',trouble:'فيه مشكلة؟',test:'جرّب السيرفر',noread:'معرفتش أقرا الصورة دي. جرّب غيرها.',slow:'الموضوع اتأخر أوي. جرّب صورة أصغر.',nofood:'مش شايف أكل في الصورة دي. جرّب غيرها.',problem:'في مشكلة: ',tabP:'ترند الأكل',popNote:'اقتراحات من الذكاء الاصطناعي حسب معلوماته، مش ترتيب لحظي.',rW:'العالم',rE:'مصر',rM:'الشرق الأوسط',rI:'إيطاليا',rA:'آسيا',rU:'الأمريكتين',kC:'الكلاسيك',kT:'الترند',showL:'وريني الأكلات',back:'رجوع',pick:'بختار لك أكلات.. ثواني',writing:'بكتب الوصفة.. ثواني'}};
 let lang='en',mode='fridge',blobs=[];
 try{lang=localStorage.getItem('lang')||((navigator.language||'').slice(0,2)==='ar'?'ar':'en')}catch(_){}
 const t=k=>T[lang][k];
@@ -108,15 +128,17 @@ function apply(){
 }
 document.querySelectorAll('.lang button').forEach(b=>b.onclick=()=>{
   lang=b.dataset.l;try{localStorage.setItem('lang',lang)}catch(_){}
-  $('#out').replaceChildren();status('');apply();
+  $('#out').replaceChildren();status('');lastList=null;apply();
 });
 function setMode(m){
   mode=m;blobs=[];$('#thumbs').replaceChildren();$('#out').replaceChildren();$('#go').disabled=true;status('');
-  $('#t-fridge').setAttribute('aria-selected',m==='fridge');$('#t-dish').setAttribute('aria-selected',m==='dish');
+  $('#t-fridge').setAttribute('aria-selected',m==='fridge');$('#t-dish').setAttribute('aria-selected',m==='dish');$('#t-pop').setAttribute('aria-selected',m==='pop');
+  const pop=m==='pop';$('#drop').hidden=pop;$('#thumbs').hidden=pop;$('#go').hidden=pop;$('#pop').hidden=!pop;
   $('#file').multiple=m==='fridge';$('#file').value='';apply();
 }
 $('#t-fridge').onclick=()=>setMode('fridge');
 $('#t-dish').onclick=()=>setMode('dish');
+$('#t-pop').onclick=()=>setMode('pop');
 
 function loadImg(file){return new Promise((res,rej)=>{const u=URL.createObjectURL(file);const i=new Image();i.onload=()=>{URL.revokeObjectURL(u);res(i)};i.onerror=()=>rej(new Error('img'));i.src=u})}
 async function shrink(file){
@@ -138,13 +160,12 @@ function status(msg,isErr){const s=$('#status');s.hidden=!msg;s.textContent=msg|
 function stepsList(steps){const o=h('ol');steps.forEach(x=>o.append(h('li',null,x)));return o}
 
 function picBox(){const b=h('div','pic skel');b.append(h('span','ph','🍽️'));return b}
+async function fetchPic(q){try{const r=await fetch('/api/img?q='+encodeURIComponent(q));const d=await r.json();return d.url?d:null}catch(_){return null}}
 async function loadPic(box,q){
-  try{
-    const r=await fetch('/api/img?q='+encodeURIComponent(q));const d=await r.json();if(!d.url)throw 0;
-    const i=new Image();i.alt=q;
-    i.onload=()=>{box.classList.remove('skel');box.replaceChildren(i);if(d.credit){const a=h('a','cr','📷 '+d.credit);a.href=d.creditUrl;a.target='_blank';a.rel='noopener';box.append(a)}};
-    i.onerror=()=>box.classList.remove('skel');i.src=d.url;
-  }catch(_){box.classList.remove('skel')}
+  const d=await fetchPic(q);if(!d)return box.remove();
+  const i=new Image();i.alt=q;
+  i.onload=()=>{box.classList.remove('skel');box.replaceChildren(i);const a=h('a','cr','📷 '+d.credit);a.href=d.creditUrl;a.target='_blank';a.rel='noopener';box.append(a)};
+  i.onerror=()=>box.remove();i.src=d.url;
 }
 function renderFridge(d){
   const out=$('#out');out.replaceChildren();
@@ -165,10 +186,12 @@ function renderFridge(d){
     card.append(det);out.append(card);
   });
 }
-function renderDish(d){
+function renderDish(d,q,back){
   const out=$('#out');out.replaceChildren();
+  if(back){const bb=h('button','back',t('back'));bb.onclick=()=>lastList&&renderList(lastList);out.append(bb)}
   const card=h('div','card');
-  const pic=h('div','pic');const mine=new Image();mine.alt=d.name||'';mine.src=URL.createObjectURL(blobs[0]);pic.append(mine);card.append(pic);
+  if(q){const pic=picBox();card.append(pic);loadPic(pic,q)}
+  else{const pic=h('div','pic');const mine=new Image();mine.alt=d.name||'';mine.src=URL.createObjectURL(blobs[0]);pic.append(mine);card.append(pic)}
   card.append(h('h2',null,d.name));
   const m=h('div','meta');[d.cuisine,d.time,d.servings&&(t('serves')+' '+d.servings)].filter(Boolean).forEach(x=>m.append(h('span',null,x)));card.append(m);
   card.append(h('p','sec',t('ing')));
@@ -199,6 +222,44 @@ $('#go').onclick=async()=>{
     console.error(e);status(e&&e.name==='AbortError'?t('slow'):t('problem')+((e&&e.message)||''),true);
   }finally{$('#go').disabled=!blobs.length}
 };
+
+let popR='world',popK='classic',lastList=null;
+const RN={world:'around the world',egypt:'Egypt',arab:'the Middle East and Arab world',italy:'Italy',asia:'Asia',americas:'the Americas'};
+function sync(){document.querySelectorAll('[data-r]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.r===popR));document.querySelectorAll('[data-k]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===popK))}
+document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{popR=b.dataset.r;sync()});
+document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{popK=b.dataset.k;sync()});
+async function callAI(prompt,images){
+  const ac=new AbortController();const to=setTimeout(()=>ac.abort(),55000);
+  const res=await fetch('/api/ai',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({prompt,images:images||[]}),signal:ac.signal});clearTimeout(to);
+  if(!res.ok){let m='';try{m=(await res.json()).error}catch(_){}throw new Error(m||('Server error '+res.status))}
+  return res.json();
+}
+function fail(e){console.error(e);status(e&&e.name==='AbortError'?t('slow'):t('problem')+((e&&e.message)||''),true)}
+function renderList(d){
+  const out=$('#out');out.replaceChildren();
+  (d.dishes||[]).forEach((x,i)=>{
+    const c=h('div','card dish');c.style.animationDelay=i*50+'ms';c.tabIndex=0;c.setAttribute('role','button');
+    const th=h('div','thumb');th.hidden=true;const tx=h('div');tx.append(h('h2',null,x.name),h('div','meta',x.blurb));c.append(th,tx);
+    fetchPic(x.photo||x.name).then(p=>{if(!p)return;const im=new Image();im.alt='';im.onload=()=>{th.hidden=false;th.append(im)};im.src=p.url});
+    const open=()=>openDish(x);c.onclick=open;c.onkeydown=e=>{if(e.key==='Enter')open()};out.append(c);
+  });
+}
+async function showList(){
+  status(t('pick'));$('#out').replaceChildren();$('#showl').disabled=true;
+  try{
+    const kind=popK==='classic'?'the most beloved, popular classic dishes that people actually cook and eat':'dishes that have been trending recently in restaurants, social media and home cooking';
+    const d=await callAI('List 10 of '+kind+', from '+RN[popR]+'. Use your general knowledge (this is not live data). Return ONLY JSON {"dishes":[{"name":string,"photo":string,"blurb":string}]}. "photo" is the exact, common English name of the dish. "blurb" is one short sentence. '+langRule());
+    status('');lastList=d;renderList(d);
+  }catch(e){fail(e)}finally{$('#showl').disabled=false}
+}
+async function openDish(x){
+  status(t('writing'));$('#out').replaceChildren();
+  try{
+    const d=await callAI('Write a complete home recipe for the dish "'+(x.photo||x.name)+'" (shown to the user as "'+x.name+'"). Return ONLY JSON {"name":string,"cuisine":string,"time":string,"servings":number,"ingredients":[{"amount":string,"item":string}],"steps":[string],"tip":string}. Steps must be clear and specific, with temperatures and times. '+langRule());
+    status('');renderDish(d,x.photo||x.name,true);scrollTo(0,0);
+  }catch(e){fail(e);if(lastList)renderList(lastList)}
+}
+$('#showl').onclick=showList;
 apply();
 </script>
 </body>
