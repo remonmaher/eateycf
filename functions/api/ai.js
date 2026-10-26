@@ -23,7 +23,7 @@ export async function onRequest({ request, env }) {
 
   try {
     const { prompt, images } = await request.json();
-    if (!prompt || !Array.isArray(images) || images.length === 0 || images.length > 4)
+    if (!prompt || !Array.isArray(images) || images.length > 4)
       return json(400, { error: 'Bad request (no photo received).' });
 
     const parts = [
