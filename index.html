@@ -86,7 +86,7 @@ details summary{cursor:pointer;font-weight:600;color:var(--green);margin-top:12p
 <button class="go" id="go" disabled></button>
 <div class="status" id="status" hidden></div>
 <div id="out"></div>
-<p class="foot"><span data-i18n="trouble"></span> <a href="/api/ai" data-i18n="test"></a> · v5</p>
+<p class="foot"><span data-i18n="trouble"></span> <a href="/api/ai" data-i18n="test"></a> · v6</p>
 </div>
 <script>
 window.addEventListener('error',e=>{try{status('Page error: '+e.message,true)}catch(_){}});
@@ -142,7 +142,7 @@ async function loadPic(box,q){
   try{
     const r=await fetch('/api/img?q='+encodeURIComponent(q));const d=await r.json();if(!d.url)throw 0;
     const i=new Image();i.alt=q;
-    i.onload=()=>{box.classList.remove('skel');box.replaceChildren(i);if(d.credit){const a=h('a','cr','📷 '+d.credit+' · Pexels');a.href=d.creditUrl;a.target='_blank';a.rel='noopener';box.append(a)}};
+    i.onload=()=>{box.classList.remove('skel');box.replaceChildren(i);if(d.credit){const a=h('a','cr','📷 '+d.credit);a.href=d.creditUrl;a.target='_blank';a.rel='noopener';box.append(a)}};
     i.onerror=()=>box.classList.remove('skel');i.src=d.url;
   }catch(_){box.classList.remove('skel')}
 }
